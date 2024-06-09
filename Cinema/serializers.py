@@ -1,43 +1,45 @@
 from rest_framework import serializers
-from .models import SubscriptionType, Subscription, MovieCategory, Movie, Order
+
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
 
 
 class SubscriptionTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionType
-        fields = '__all__'  # Include all fields
+        fields = '__all__'
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(read_only=True)  # Show user details as read-only
-    is_active = serializers.SerializerMethodField()
-
     class Meta:
         model = Subscription
         fields = ('user', 'subscription_type', 'is_active')
 
-    def get_is_active(self, obj):
-        return obj.is_active()  # Call the is_active method from the Subscription model
 
-
-class MovieCategorySerializer(serializers.ModelSerializer):
+class MovieOrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MovieCategory
-        fields = '__all__'  # Include all fields
+        model = MovieOrder
+        fields = '__all__'
 
 
-class MovieSerializer(serializers.ModelSerializer):
-    category = MovieCategorySerializer(read_only=True)  # Nested serializer for category
-
+class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Movie
-        fields = ('external_id', 'title', 'category')  # Include relevant movie details
+        model = Restaurant
+        fields = '__all__'
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(read_only=True)  # Show user details as read-only
-    movie = MovieSerializer(read_only=True)  # Nested serializer for movie
-
+class SnackSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
-        fields = ('user', 'movie', 'payment_completed')
+        model = Snack
+        fields = '__all__'
+
+
+class SnackOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SnackOrder
+        fields = '__all__'
+
+
+class SubscriptionPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionPayment
+        fields = '__all__'

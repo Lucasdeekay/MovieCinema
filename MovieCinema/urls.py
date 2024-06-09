@@ -25,7 +25,7 @@ from MovieCinema import settings
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Automated Result Clearance System",
+      title="Movie Cinema",
       default_version='v1',
       description="API description",
       terms_of_service="https://yourwebsite.com/terms/",

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Subscription{% endblock title %}
+
+{% block subtitle %}Subscription{% endblock subtitle %}
+
+{% block main %}
+
+<div class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                <div class="pricing-plan-wrapper">
+                    <div class="pricing-plan-header">
+                        <h4 class="plan-name text-capitalize text-body mb-0">Free</h4>
+                    </div>
+                    <div class="pricing-details">
+                        <div class="pricing-plan-description">
+                            <ul class="list-inline p-0">
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Ads free movies and shows</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-times"></i>
+                                    <span class="font-size-18 fw-500">Watch on TV or Laptop</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-times"></i>
+                                    <span class="font-size-18 fw-500">Movie Cinema Special</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-times"></i>
+                                    <span class="font-size-18 fw-500">Max video quality</span>
+                                </li>
+                            </ul>
+                        </div>
+                        {% if subscription.name != 'free' %}
+                        <div class="pricing-plan-footer">
+                            <div class="iq-button">
+                                <a href="{% url 'change_subscription' 'free' %}" class="btn text-uppercase position-relative">
+                                    <span class="button-text">select free</span>
+                                    <i class="fa-solid fa-play"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+                <div class="pricing-plan-wrapper">
+                    <div class="pricing-plan-discount bg-primary p-2 text-center">
+                        <span class="text-white">Save 20%</span>
+                    </div>
+                    <div class="pricing-plan-header">
+                        <h4 class="plan-name text-capitalize text-body">Premium</h4>
+                        <span class="sale-price text-decoration-line-through">#12000</span>
+                        <span class="main-price text-primary">#9600</span>
+                        <span class="font-size-18">/ 1 Year</span>
+                    </div>
+                    <div class="pricing-details">
+                        <div class="pricing-plan-description">
+                            <ul class="list-inline p-0">
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Ads free movies and shows</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Watch on TV or Laptop</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Movie Cinema Special</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Max video quality</span>
+                                </li>
+                            </ul>
+                        </div>
+                        {% if subscription.name != 'yearly' %}
+                        <div class="pricing-plan-footer">
+                            <div class="iq-button">
+                                <a href="{% url 'change_subscription' 'yearly' %}" class="btn text-uppercase position-relative">
+                                    <span class="button-text">select premium</span>
+                                    <i class="fa-solid fa-play"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-plan-wrapper">
+                    <div class="pricing-plan-header">
+                        <h4 class="plan-name text-capitalize text-body">Basic</h4>
+                        <span class="main-price text-primary">#1000</span>
+                        <span class="font-size-18">/ 1 Month</span>
+                    </div>
+                    <div class="pricing-details">
+                        <div class="pricing-plan-description">
+                            <ul class="list-inline p-0">
+                                <li>
+                                    <i class="fas fa-times"></i>
+                                    <span class="font-size-18 fw-500">Ads free movies and shows</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Watch on TV or Laptop</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Movie Cinema Special</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check text-primary"></i>
+                                    <span class="font-size-18 fw-500">Max video quality</span>
+                                </li>
+                            </ul>
+                        </div>
+                        {% if subscription.name != 'monthly' %}
+                        <div class="pricing-plan-footer">
+                            <div class="iq-button">
+                                <a href="{% url 'change_subscription' 'monthly' %}" class="btn text-uppercase position-relative">
+                                    <span class="button-text">select basic</span>
+                                    <i class="fa-solid fa-play"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
+

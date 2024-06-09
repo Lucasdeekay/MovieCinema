@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Movies{% endblock title %}
+
+{% block subtitle %}Movies{% endblock subtitle %}
+
+{% block main %}
+<div class="section-padding">
+    <div class="container-fluid">
+        {% if trending %}
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h4 class="main-title text-capitalize mb-0">Trending</h4>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            {% for movie in trending %}
+            <div class="col mb-4">
+                <div class="iq-card-geners card-hover-style-two">
+                    <div class="block-images position-relative w-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <div class="img-box rounded position-relative">
+                                <img src="{{ base_url }}{{ movie.backdrop_path }}" alt="geners-img"
+                                     class="img-fluid object-cover w-100 rounded">
+                                <div class="blog-description">
+                                    <h6 class="mb-0 iq-title">
+                                        {% if movie.title %}
+                                        {{ movie.title }}
+                                        {% elif movie.original_title %}
+                                        {{ movie.original_title }}
+                                        {% elif movie.original_name %}
+                                        {{ movie.original_name }}
+                                        {% elif movie.name %}
+                                        {{ movie.name }}
+                                        {% endif %}
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if netflix_originals %}
+        <div class="d-flex align-items-center justify-content-between my-4">
+            <h4 class="main-title text-capitalize mb-0">Netflix Originals</h4>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            {% for movie in netflix_originals %}
+            <div class="col mb-4">
+                <div class="iq-card-geners card-hover-style-two">
+                    <div class="block-images position-relative w-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <div class="img-box rounded position-relative">
+                                <img src="{{ base_url }}{{ movie.backdrop_path }}" alt="geners-img"
+                                     class="img-fluid object-cover w-100 rounded">
+                                <div class="blog-description">
+                                    <h6 class="mb-0 iq-title">
+                                        {% if movie.title %}
+                                        {{ movie.title }}
+                                        {% elif movie.original_title %}
+                                        {{ movie.original_title }}
+                                        {% elif movie.original_name %}
+                                        {{ movie.original_name }}
+                                        {% elif movie.name %}
+                                        {{ movie.name }}
+                                        {% endif %}
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if top_rated %}
+        <div class="d-flex align-items-center justify-content-between my-4">
+            <h4 class="main-title text-capitalize mb-0">Top Rated</h4>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            {% for movie in top_rated %}
+            <div class="col mb-4">
+                <div class="iq-card-geners card-hover-style-two">
+                    <div class="block-images position-relative w-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <div class="img-box rounded position-relative">
+                                <img src="{{ base_url }}{{ movie.backdrop_path }}" alt="geners-img"
+                                     class="img-fluid object-cover w-100 rounded">
+                                <div class="blog-description">
+                                    <h6 class="mb-0 iq-title">
+                                        {% if movie.title %}
+                                        {{ movie.title }}
+                                        {% elif movie.original_title %}
+                                        {{ movie.original_title }}
+                                        {% elif movie.original_name %}
+                                        {{ movie.original_name }}
+                                        {% elif movie.name %}
+                                        {{ movie.name }}
+                                        {% endif %}
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if top_action %}
+        <div class="d-flex align-items-center justify-content-between my-4">
+            <h4 class="main-title text-capitalize mb-0">Top Action</h4>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            {% for movie in top_action %}
+            <div class="col mb-4">
+                <div class="iq-card-geners card-hover-style-two">
+                    <div class="block-images position-relative w-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <div class="img-box rounded position-relative">
+                                <img src="{{ base_url }}{{ movie.backdrop_path }}" alt="geners-img"
+                                     class="img-fluid object-cover w-100 rounded">
+                                <div class="blog-description">
+                                    <h6 class="mb-0 iq-title">
+                                        {% if movie.title %}
+                                        {{ movie.title }}
+                                        {% elif movie.original_title %}
+                                        {{ movie.original_title }}
+                                        {% elif movie.original_name %}
+                                        {{ movie.original_name }}
+                                        {% elif movie.name %}
+                                        {{ movie.name }}
+                                        {% endif %}
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock main %}
+

@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="iq-breadcrumb" style="background-image: url({% static 'assets/images/pages/01.webp' %});">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <nav aria-label="breadcrumb" class="text-center">
+                    <h2 class="title">{% block title %}{% endblock title %}</h2>
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">{% block subtitle %}{% endblock subtitle %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block main %}
+{% endblock main %}
+
+
+{% endblock content %}

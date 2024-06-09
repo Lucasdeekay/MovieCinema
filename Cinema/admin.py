@@ -1,32 +1,38 @@
 from django.contrib import admin
-from .models import SubscriptionType, Subscription, MovieCategory, Movie, Order
+
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
 
 
-# Register SubscriptionType model
 @admin.register(SubscriptionType)
 class SubscriptionTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'price')
 
 
-# Register Subscription model
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('user', 'subscription_type', 'is_active')
 
 
-# Register MovieCategory model
-@admin.register(MovieCategory)
-class MovieCategoryAdmin(admin.ModelAdmin):
+@admin.register(MovieOrder)
+class MovieOrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'date')
+
+
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-# Register Movie model (consider adding 'category' to list_display if needed)
-@admin.register(Movie)
-class MovieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'external_id')  # You can adjust this based on your needs
+@admin.register(Snack)
+class SnackAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
 
 
-# Register Order model
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'movie', 'payment_completed')
+@admin.register(SnackOrder)
+class SnackOrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'snack', 'restaurant', 'quantity', 'total_price', 'date')
+
+
+@admin.register(SubscriptionPayment)
+class SubscriptionPaymentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'subscription_type', 'date')

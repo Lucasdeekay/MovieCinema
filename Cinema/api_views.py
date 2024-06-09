@@ -1,56 +1,46 @@
-from rest_framework import viewsets, permissions
-from .models import SubscriptionType, Subscription, MovieCategory, Movie, Order
+from rest_framework import viewsets
+
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
 from .serializers import (
-    SubscriptionTypeSerializer, SubscriptionSerializer, MovieCategorySerializer, MovieSerializer, OrderSerializer
+    SubscriptionTypeSerializer,
+    SubscriptionSerializer,
+    MovieOrderSerializer,
+    RestaurantSerializer,
+    SnackSerializer,
+    SnackOrderSerializer, SubscriptionPaymentSerializer,
 )
 
 
 class SubscriptionTypeViewSet(viewsets.ModelViewSet):
-    """API endpoint for managing Subscription Types"""
-    permission_classes = [permissions.IsAdminUser]  # Only admins can access
     queryset = SubscriptionType.objects.all()
     serializer_class = SubscriptionTypeSerializer
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
-    """API endpoint for managing user Subscriptions"""
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access
-    queryset = Subscription.objects.select_related('subscription_type')  # Pre-fetch subscription type data
-
-    def get_serializer_class(self):
-        """
-    Override to return the appropriate serializer class based on action (list vs detail)
-    """
-        if self.action == 'list':
-            return SubscriptionSerializer  # Simpler serializer for list view
-        else:
-            return SubscriptionSerializer  # Full details for detail view (you can customize this further if needed)
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
 
 
-class MovieCategoryViewSet(viewsets.ModelViewSet):
-    """API endpoint for managing Movie Categories"""
-    permission_classes = [permissions.IsAdminUser]  # Only admins can access
-    queryset = MovieCategory.objects.all()
-    serializer_class = MovieCategorySerializer
+class MovieOrderViewSet(viewsets.ModelViewSet):
+    queryset = MovieOrder.objects.all()
+    serializer_class = MovieOrderSerializer
 
 
-class MovieViewSet(viewsets.ModelViewSet):
-    """API endpoint for managing Movies"""
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access
-    queryset = Movie.objects.select_related('category')  # Pre-fetch category data
-
-    def get_serializer_class(self):
-        """
-    Override to return the appropriate serializer class based on action (list vs detail)
-    """
-        if self.action == 'list':
-            return MovieSerializer  # Simpler serializer for list view
-        else:
-            return MovieSerializer  # Full details for detail view (you can customize this further if needed)
+class RestaurantViewSet(viewsets.ModelViewSet):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
 
 
-class OrderViewSet(viewsets.ModelViewSet):
-    """API endpoint for managing user Orders"""
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access
-    queryset = Order.objects.select_related('user', 'movie__category')  # Pre-fetch user and movie category data
-    serializer_class = OrderSerializer
+class SnackViewSet(viewsets.ModelViewSet):
+    queryset = Snack.objects.all()
+    serializer_class = SnackSerializer
+
+
+class SnackOrderViewSet(viewsets.ModelViewSet):
+    queryset = SnackOrder.objects.all()
+    serializer_class = SnackOrderSerializer
+
+
+class SubscriptionPaymentViewSet(viewsets.ModelViewSet):
+    queryset = SubscriptionPayment.objects.all()
+    serializer_class = SubscriptionPaymentSerializer

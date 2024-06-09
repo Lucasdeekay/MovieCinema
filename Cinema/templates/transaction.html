@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Transaction{% endblock title %}
+
+{% block subtitle %}Transaction{% endblock subtitle %}
+
+{% block main %}
+
+
+<div class="section-padding">
+    <div class="container">
+        <div class="order">
+            <p class="thank">SUBSCRIPTION HISTORY</p>
+            <table class="table">
+                <tr>
+                    <th>Subscription Type</th>
+                    <th>Price (#)</th>
+                    <th>Date</th>
+                </tr>
+
+                {% for pay in payments %}
+                <tr>
+                    <td>{{ pay.subscription_type.name }}</td>
+                    <td>{{ pay.subscription_type.price }}</td>
+                    <td>{{ pay.date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="order">
+            <p class="thank">SNACK ORDER HISTORY</p>
+            <table class="table">
+                <tr>
+                    <th>Snack</th>
+                    <th>Quantity</th>
+                    <th>Restaurant</th>
+                    <th>Price (#)</th>
+                    <th>Date</th>
+                </tr>
+
+                {% for order in snack_order %}
+                <tr>
+                    <td>{{ order.snack.name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.restaurant.name }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>{{ order.date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
+

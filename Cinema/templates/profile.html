@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block subtitle %}Profile{% endblock subtitle %}
+
+{% block main %}
+
+
+<div class="section-padding">
+    <div class="container">
+        <div class="order">
+            <p class="thank">{{ user.username|default:'kennylee'|upper }}'S PROFILE</p>
+            <ul class="details list-inline">
+                <li class="detail">FIRST NAME:<strong>{{ user.first_name|default:'Kehinde' }}</strong></li>
+                <li class="detail">LAST NAME:<strong>{{ user.last_name|default:'Ladipo' }}</strong></li>
+                <li class="detail">EMAIL:<strong>{{ user.email|default:'kennylee98@gmail.com' }}</strong></li>
+                <li class="detail">SUBSCRIPTION:<strong>{{ subscription.name|default:'free' }}</strong></li>
+            </ul>
+        </div>
+
+        <div class="row justify-content-center align-items-center height-self-center">
+            <div class="col-lg-6 col-md-12 align-self-center">
+                <div class="user-login-card bg-body">
+                    <div class="text-center">
+                        <h5 class="mb-4">Change Password</h5>
+                    </div>
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <input type="password" name="current_password" class="form-control rounded-0"
+                                   placeholder="Old Password" required="">
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" name="new_password1" class="form-control rounded-0"
+                                   placeholder="New Password" required="">
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" name="new_password2" class="form-control rounded-0"
+                                   placeholder="Confirm Password" required="">
+                        </div>
+                        <div class="full-button">
+                            <div class="iq-button">
+                                <button type="submit" class="btn text-uppercase position-relative">
+                                    <span class="button-text">submit</span>
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
+
