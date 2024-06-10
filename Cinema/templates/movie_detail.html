@@ -31,11 +31,11 @@
                                 {% endfor %}
                             </ul>
                             <div class="slider-ratting d-flex align-items-center ms-lg-3 ms-0">
-                                    <ul class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
-                                        <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                                    </ul>
-                                    <span class="text-white ms-2">{{ vote_average }}/10 (tmdb)</span>
-                                </div>
+                                <ul class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
+                                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                                </ul>
+                                <span class="text-white ms-2">{{ vote_average }}/10 (tmdb)</span>
+                            </div>
                             <div class="d-flex flex-wrap align-items-center text-white text-detail flex-wrap my-4">
                                 <span class="trending-year trending-year-list font-Weight-500 genres-info">
                                   Release Date: {{ release_date }}
@@ -115,14 +115,26 @@
                                             <div class="col-md-12">
                                                 <form action="" method="post">
                                                     {% csrf_token %}
+                                                    <div id="toast">
+                                                        {% for message in messages %}
+                                                        <div class="alert alert-info" role="alert"><strong></strong><i>{{
+                                                            message }}</i></div>
+                                                        {% endfor %}
+                                                    </div>
                                                     <div class="mb-4">
-                                                        <select name="snack" class="form-control rounded-0" >
+                                                        <select name="restaurant" required="" class="form-control rounded-0">
                                                             <option value="">Select Restaurant</option>
+                                                            {% for restaurant in restaurants %}
+                                                            <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
+                                                            {% endfor %}
                                                         </select>
                                                     </div>
                                                     <div class="mb-4">
-                                                        <select name="snack" class="form-control rounded-0" >
+                                                        <select name="snack" class="form-control rounded-0" required="">
                                                             <option value="">Select Snack</option>
+                                                            {% for snack in snacks %}
+                                                            <option value="{{ snack.id }}">{{ snack.name }}</option>
+                                                            {% endfor %}
                                                         </select>
                                                     </div>
                                                     <div class="mb-4">

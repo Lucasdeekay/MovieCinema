@@ -36,6 +36,10 @@
     <link href="../../../css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap"
           rel="stylesheet">
 
+    <!--  jQuer cdn  -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
 </head>
 
 <body class=" custom-header-relative ">
@@ -120,10 +124,7 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav align-items-center ms-auto mb-2 mb-xl-0">
                                 <li class="nav-item dropdown" id="itemdropdown1">
-                                    <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}"
-                                       id="navbarDropdown"
-                                       role="button" aria-expanded="false" data-bs-toggle="collapse"
-                                       aria-controls="profile">
+                                    <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}">
                                         <div class="btn-icon rounded-pill user-icons">
                                     <span class="btn-inner">
                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -150,7 +151,6 @@
     {% endblock content %}
 
 </main>
-
 
 
 <footer class="footer footer-default">
@@ -232,6 +232,13 @@
 <script src="{% static 'assets/js/swiper.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
 <script src="../../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js"
         data-cf-settings="3aeb20da03c4715595e3dba0-|49" defer=""></script>
+
+<script>
+    $(function(){
+        $("#toast").fadeIn(5000);
+      $("#toast").fadeOut(5000);
+    })
+</script>
 </body>
 
 </html>

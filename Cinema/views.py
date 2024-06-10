@@ -27,17 +27,17 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            subscription = Subscription.objects.get_or_create(user=user)
-            if not subscription.is_active():
-                subscription.subscription_type = SubscriptionType.objects.get(name='free')
-                subscription.add_expiry_date()
-                subscription.save()
+            subscript = Subscription.objects.get(user=user)
+            if not subscript.is_active():
+                subscript.subscription_type = SubscriptionType.objects.get(name='free')
+                subscript.add_expiry_date()
+                subscript.save()
             # Redirect to successful login page
-            return redirect('dashboard')  # Replace 'home' with your desired redirect URL
+            return redirect('home')  # Replace 'home' with your desired redirect URL
         else:
             # Invalid login credentials
-            error_message = 'Invalid username or password.'
-            return render(request, 'login.html', {'error_message': error_message})
+            messages.error(request, 'Invalid username or password.')
+            return render(request, 'login.html')
     return render(request, 'login.html')
 
 
@@ -50,13 +50,15 @@ def register_view(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         if password1 != password2:
-            error_message = 'Passwords do not match.'
-            return render(request, 'register.html', {'error_message': error_message})
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'register.html')
         # Create user
         user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email,
                                         password=password1)
         user.save()
-        Subscription.objects.get_or_create(user=user, subscription_type=SubscriptionType.objects.get_or_create(name='free'))
+        subscription_type = SubscriptionType.objects.get(name='free')
+        Subscription.objects.get_or_create(user=user, subscription_type=subscription_type)
+        messages.success(request, 'Your account has been successfully created.')
         return redirect('login')  # Replace 'home' with your desired redirect URL
     return render(request, 'register.html')
 
@@ -75,11 +77,11 @@ def forgot_password_view(request):
                 from_email='your_email@example.com',  # Replace with your email address
                 recipient_list=[email],
             )
-            success_message = 'We sent you an email with instructions to reset your password.'
-            return render(request, 'forgot_password.html', {'success_message': success_message})
+            messages.success(request, 'We sent you an email with instructions to reset your password.')
+            return render(request, 'forgot_password.html')
         except User.DoesNotExist:
-            error_message = 'Email address not found.'
-            return render(request, 'forgot_password.html', {'error_message': error_message})
+            messages.error(request, 'Email address not found.')
+            return render(request, 'forgot_password.html')
     return render(request, 'forgot_password.html')
 
 
@@ -94,13 +96,13 @@ def password_reset_view(request, user_id):
         new_password1 = request.POST['new_password1']
         new_password2 = request.POST['new_password2']
         if new_password1 != new_password2:
-            error_message = 'Passwords do not match.'
-            return render(request, 'password_reset.html', {'error_message': error_message})
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'password_reset.html')
         # Set the new password
         user.set_password(new_password1)
         user.save()
-        success_message = 'Password reset successfully!'
-        return render(request, 'password_reset.html', {'success_message': success_message})
+        messages.success(request, 'Password reset successfully!')
+        return render(request, 'password_reset.html')
     return render(request, 'password_reset.html')
 
 
@@ -113,7 +115,7 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     user = request.user
-    subscript = Subscription.objects.get_or_create(user=user)
+    subscript = Subscription.objects.get(user=user)
 
     if request.method == 'POST':
         current_password = request.POST['current_password']
@@ -127,7 +129,7 @@ def profile_view(request):
             else:
                 user.set_password(new_password1)
                 user.save()
-                messages.error(request, 'Password changed successfully!')
+                messages.success(request, 'Password changed successfully!')
                 return redirect('profile')
         else:
             messages.error(request, 'Invalid current password.')
@@ -142,7 +144,7 @@ def profile_view(request):
 
 @login_required
 def subscription(request):
-    subscript = Subscription.objects.get_or_create(user=request.user)
+    subscript = Subscription.objects.get(user=request.user)
 
     return render(request, 'subscription.html', {'subscription': subscript.subscription_type})
 
@@ -155,7 +157,7 @@ def change_subscription_view(request, subscription_name):
         if selected_type.name != 'free':
             response = Transaction.initialize(
                 reference=str(uuid.uuid4()),
-                amount=selected_type.price,
+                amount=float(selected_type.price) * 100,
                 email=request.user.email
             )
 
@@ -188,7 +190,7 @@ def movie_rows(request):
   """
     selected_type = Subscription.objects.get(user=request.user).subscription_type
 
-    if selected_type != 'free':
+    if selected_type.name != 'free':
         fetch_urls = {
             'trending': f'/trending/all/week?api_key={API_KEY}&language=en-US',
             'netflix_originals': f'/discover/tv?api_key={API_KEY}&with_networks=213',
@@ -254,21 +256,8 @@ def movie_detail(request, movie_id):
 
   Renders a template with the movie details.
   """
-    try:
-        url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for failed requests
-        movie_data = response.json()
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"Error fetching movie details for ID {movie_id}: {e}")
-        return redirect('login')
 
     user = request.user
-    MovieOrder.objects.create(user=user, external_id=movie_id, title=movie_data['original_title'])
-
-    # Available snacks and restaurants
-    snacks = Snack.objects.all()
-    restaurants = Restaurant.objects.all()
 
     # Handle form submission
     if request.method == 'POST':
@@ -289,7 +278,7 @@ def movie_detail(request, movie_id):
 
         if response['status']:
             SnackOrder.objects.create(
-                user=1,
+                user=user,
                 snack=snack,
                 restaurant=restaurant,
                 quantity=int(quantity),
@@ -301,6 +290,21 @@ def movie_detail(request, movie_id):
 
         # Redirect to confirmation or payment page (replace with your logic)
         return redirect('order_confirmation')
+
+    try:
+        url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for failed requests
+        movie_data = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Error fetching movie details for ID {movie_id}: {e}")
+        return redirect('login')
+
+    MovieOrder.objects.get_or_create(user=user, external_id=movie_id, title=movie_data['original_title'])
+
+    # Available snacks and restaurants
+    snacks = Snack.objects.all()
+    restaurants = Restaurant.objects.all()
 
     videosSearch = VideosSearch('NoCopyrightSounds', limit=1)
     results = videosSearch.result()
@@ -328,10 +332,10 @@ def verify_payment(request, reference):
 
     if response['status'] and response['data']['status'] == 'success':
         messages.error(request, 'Payment successful')
-        return redirect('user_dashboard')
+        return redirect('home')
     else:
         messages.error(request, 'Payment verification failed')
-        return redirect('user_dashboard')
+        return redirect('home')
 
 
 @login_required

@@ -2,107 +2,114 @@
 <html lang="en" data-bs-theme="dark">
 {% load static %}
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Movie Cinema</title>
-  <!-- Google Font Api KEY-->
-  <meta name="google_font_api" content="AIzaSyBG58yNdAjc20_8jAvLNSVi9E4Xhwjau_k">
-  
-  <!-- Library / Plugin Css Build -->
-  <link rel="stylesheet" href="{% static 'assets/css/core/libs.min.css' %}">
-  
-  <!-- font-awesome css -->
-  <link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/all.min.css' %}">
-  
-  <!-- Iconly css -->
-  <link rel="stylesheet" href="{% static 'assets/vendor/iconly/css/style.css' %}">
-  
-  <!-- Animate css -->
-  <link rel="stylesheet" href="{% static 'assets/vendor/animate.min.css' %}">
-  
-  
-  
-  
-  
-  
-  <!-- Streamit Design System Css -->
-  <link rel="stylesheet" href="{% static 'assets/css/streamit.min.css' %}">
-  
-  <!-- Custom Css -->
-  <link rel="stylesheet" href="{% static 'assets/css/custom.min.css' %}">
-  
-  <!-- Rtl Css -->
-  <link rel="stylesheet" href="{% static 'assets/css/rtl.min.css' %}">
-  
-  <!-- Google Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="../../../css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
-  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Movie Cinema</title>
+    <!-- Google Font Api KEY-->
+    <meta name="google_font_api" content="AIzaSyBG58yNdAjc20_8jAvLNSVi9E4Xhwjau_k">
+
+    <!-- Library / Plugin Css Build -->
+    <link rel="stylesheet" href="{% static 'assets/css/core/libs.min.css' %}">
+
+    <!-- font-awesome css -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/all.min.css' %}">
+
+    <!-- Iconly css -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/iconly/css/style.css' %}">
+
+    <!-- Animate css -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/animate.min.css' %}">
+
+
+    <!-- Streamit Design System Css -->
+    <link rel="stylesheet" href="{% static 'assets/css/streamit.min.css' %}">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom.min.css' %}">
+
+    <!-- Rtl Css -->
+    <link rel="stylesheet" href="{% static 'assets/css/rtl.min.css' %}">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="../../../css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap"
+          rel="stylesheet">
+
+    <!--  jQuer cdn  -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="  ">
-  <span class="screen-darken"></span>
-  <main class="main-content">
-      <!--Nav Start-->
-      <!--Nav End-->
+<span class="screen-darken"></span>
+<main class="main-content">
+    <!--Nav Start-->
+    <!--Nav End-->
 
-      <!--bread-crumb-->
-      <!--bread-crumb-->
+    <!--bread-crumb-->
+    <!--bread-crumb-->
 
 
-<div class="vh-100" style="background: url({% static 'assets/images/pages/01.webp' %}); background-size: cover; background-repeat: no-repeat; position: relative;min-height:500px">
-    <div class="container">
-        <div class="row justify-content-center align-items-center height-self-center vh-100">
-            <div class="col-lg-5 col-md-12 align-self-center">
-                <div class="user-login-card bg-body">
-                    <div class="text-center">
-                        <!--Logo -->
-                        <div class="logo-default">
-                            <a class="navbar-brand text-primary" href="{% url 'login' %}">
-                                <h3><span class="text-white">MOVIE</span> <span style="color:red">CINEMA</span></h3>
-                            </a>
+    <div class="vh-100"
+         style="background: url({% static 'assets/images/pages/01.webp' %}); background-size: cover; background-repeat: no-repeat; position: relative;min-height:500px">
+        <div class="container">
+            <div class="row justify-content-center align-items-center height-self-center vh-100">
+                <div class="col-lg-5 col-md-12 align-self-center">
+                    <div class="user-login-card bg-body">
+                        <div class="text-center">
+                            <!--Logo -->
+                            <div class="logo-default">
+                                <a class="navbar-brand text-primary" href="{% url 'login' %}">
+                                    <h3><span class="text-white">MOVIE</span> <span style="color:red">CINEMA</span></h3>
+                                </a>
+                            </div>
                         </div>
+
+
+                        {% block content %}
+                        {% endblock content %}
                     </div>
-
-
-                    {% block content %}
-                    {% endblock content %}
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-  </main>
-
+</main>
 
 
+<!-- Wrapper End-->
+<!-- Library Bundle Script -->
+<script src="{% static 'assets/js/core/libs.min.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- Plugin Scripts -->
 
-  <!-- Wrapper End-->
-  <!-- Library Bundle Script -->
-  <script src="{% static 'assets/js/core/libs.min.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- Plugin Scripts -->
-  
-  
-  
-  
-  
-  
-  <!-- Lodash Utility -->
-  <script src="{% static 'assets/vendor/lodash/lodash.min.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- External Library Bundle Script -->
-  <script src="{% static 'assets/js/core/external.min.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- countdown Script -->
-  <script src="{% static 'assets/js/plugins/countdown.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- utility Script -->
-  <script src="{% static 'assets/js/utility.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- Setting Script -->
-  <script src="{% static 'assets/js/setting.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <script src="{% static 'assets/js/setting-init.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <!-- Streamit Script -->
-  <script src="{% static 'assets/js/streamit.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-  <script src="{% static 'assets/js/swiper.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
-<script src="../../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="3aeb20da03c4715595e3dba0-|49" defer=""></script></body>
+
+<!-- Lodash Utility -->
+<script src="{% static 'assets/vendor/lodash/lodash.min.js' %}"
+        type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- External Library Bundle Script -->
+<script src="{% static 'assets/js/core/external.min.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- countdown Script -->
+<script src="{% static 'assets/js/plugins/countdown.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- utility Script -->
+<script src="{% static 'assets/js/utility.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- Setting Script -->
+<script src="{% static 'assets/js/setting.js' %}" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<script src="{% static 'assets/js/setting-init.js' %}" defer=""
+        type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<!-- Streamit Script -->
+<script src="{% static 'assets/js/streamit.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<script src="{% static 'assets/js/swiper.js' %}" defer="" type="3aeb20da03c4715595e3dba0-text/javascript"></script>
+<script src="../../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js"
+        data-cf-settings="3aeb20da03c4715595e3dba0-|49" defer=""></script>
+
+<script>
+    $(function(){
+        $("#toast").fadeIn(5000);
+      $("#toast").fadeOut(5000);
+    })
+</script>
+</body>
 
 </html>
