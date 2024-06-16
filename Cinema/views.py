@@ -1,11 +1,11 @@
+import io
 import uuid
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from paystackapi.transaction import Transaction
 
@@ -15,6 +15,8 @@ from Cinema.models import Subscription, SubscriptionType, MovieOrder, Snack, Res
 # Import libraries for API requests and YouTube trailer lookup (replace with your preferred methods)
 import requests
 from youtubesearchpython import VideosSearch
+
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 # Replace with your actual TMDB API key
 API_KEY = ''
@@ -370,3 +372,99 @@ def transaction_view(request):
     payments = SubscriptionPayment.objects.filter(user=request.user)
 
     return render(request, 'transaction.html', {'snack_order': snack_order, 'payments': payments})
+
+
+@login_required
+def get_valid_movie_orders(request):
+    movie_orders = MovieOrder.objects.filter(is_used=False)
+
+    return render(request, 'movie_order.html', {'movie_orders': movie_orders})
+
+
+def generate_ticket_image(order):
+    """
+  Generates a ticket image with order information and a visually appealing design.
+
+  Returns a BytesIO object containing the image data.
+  """
+
+    # Card dimensions and base color
+    card_width, card_height = 400, 200
+    base_color = (226, 174, 174)
+
+    # Create card image
+    card = Image.new('RGB', (card_width, card_height), base_color)
+    draw = ImageDraw.Draw(card)
+
+    # Load a font (handle potential font errors)
+    try:
+        font = ImageFont.truetype('arial.ttf', 20)
+        big_font = ImageFont.truetype('arial.ttf', 24)
+        small_font = ImageFont.truetype('arial.ttf', 12)
+    except IOError:
+        font = ImageFont.load_default()
+        big_font = ImageFont.load_default(size=24.0)
+        small_font = ImageFont.load_default(size=12.0)
+
+    # Text positions
+    text_positions = {
+        'company_name': (card_width // 2 - 50, 30),  # Adjust horizontal position
+        'user': (card_width // 2, 70),
+        'movie': (card_width // 2, 110),
+        'seat_no': (card_width // 2, 150),
+        'date': (350, 170),
+    }
+
+    # Draw text with gold color and slight blur
+    text_color = (255, 215, 0)  # Gold color
+
+    for field, position in text_positions.items():
+        text = ''
+        if field == "user":
+            text = f"{order.user.first_name} {order.user.last_name}"
+        elif field == "movie":
+            text = f"{order.movie.title}"
+        elif field == "seat_no":
+            text = f"Seat NO.{order.seat.seat_no}"
+        elif field == "date":
+            text = f"{order.date}"
+
+        text_width = draw.textlength(text, font=font, font_size=24.0)
+        centered_position = (position[0] - text_width // 2, position[1])
+
+        if field == 'company_name':
+            text = "MOVIE CINEMA"
+            text_parts = text.split()
+            draw.text((centered_position[0] + text_width - 23, centered_position[1]), text_parts[0], font=big_font, fill=(0, 0, 0))  # Black for 'MOVIE'
+            draw.text((centered_position[0] + text_width + 62, centered_position[1]), text_parts[1], font=big_font,
+                      fill=(255, 0, 0))  # Red for 'CINEMA' (adjust spacing)
+        elif field == "date":
+            draw.text(centered_position, text, font=small_font, fill=(0, 0, 0))
+        else:
+            draw.text(centered_position, text, font=font, fill=(0, 0, 0))  # Black for other text
+
+    # Save the card as an image
+    card_data = io.BytesIO()
+    card.save(card_data, format='PNG')
+    card_data.seek(0)
+
+    return card_data
+
+
+@login_required
+def download_ticket(request, order_id):
+    """
+    Creates and returns a downloadable ticket image for a specific order.
+
+    Returns an HTTP response with the image data.
+    """
+    order = MovieOrder.objects.get(pk=order_id)
+
+    # Generate ticket image using helper function (replace with your implementation)
+    ticket_image = generate_ticket_image(order)
+
+    # Set response headers for image download
+    response = HttpResponse(ticket_image, content_type='image/png')
+    response['Content-Disposition'] = f'attachment; filename=ticket_{order.id}.png'
+
+    return response

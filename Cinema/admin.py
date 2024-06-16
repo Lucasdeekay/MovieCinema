@@ -46,4 +46,4 @@ class SeatAdmin(admin.ModelAdmin):
 
 @admin.register(MovieOrder)
 class MovieOrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'movie', 'snack', 'seat', 'date', 'is_valid')
+    list_display = ('user', 'movie', 'snack', 'seat', 'date', 'is_used')

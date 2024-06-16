@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Orders{% endblock title %}
+
+{% block subtitle %}Orders{% endblock subtitle %}
+
+{% block main %}
+
+
+<div class="section-padding">
+    <div class="container">
+        <div class="order">
+            <p class="thank">VALID MOVIE ORDERS</p>
+            <table class="table">
+                <tr>
+                    <th>Movie Title</th>
+                    <th>Seat No</th>
+                    <th>Snack</th>
+                    <th>Date</th>
+                    <th>Download Ticket</th>
+                </tr>
+
+                {% if movie_orders %}
+                {% for order in movie_orders %}
+                <tr>
+                    <td>{{ order.movie.title }}</td>
+                    <td>{{ order.seat.seat_no }}</td>
+                    <td>{{ order.snack.snack.name }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>
+                        <a class="full-button" href="{% url 'download_ticket' order.id %}">
+                            <div class="iq-button">
+                                <button type="submit" id="btn"
+                                        class="btn text-uppercase position-relative">
+                                    <span class="button-text">Download</span>
+                                    <i class="fa-solid fa-download"></i>
+                                </button>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5">No available movie order</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock main %}
+

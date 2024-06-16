@@ -2,9 +2,9 @@
 
 {% load static %}
 
-{% block title %}Transaction{% endblock title %}
+{% block title %}Transactions{% endblock title %}
 
-{% block subtitle %}Transaction{% endblock subtitle %}
+{% block subtitle %}Transactions{% endblock subtitle %}
 
 {% block main %}
 
@@ -20,6 +20,7 @@
                     <th>Date</th>
                 </tr>
 
+                {% if payments %}
                 {% for pay in payments %}
                 <tr>
                     <td>{{ pay.subscription_type.name }}</td>
@@ -27,6 +28,11 @@
                     <td>{{ pay.date }}</td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="3">No available subscription payment</td>
+                </tr>
+                {% endif %}
             </table>
         </div>
 
@@ -41,6 +47,7 @@
                     <th>Date</th>
                 </tr>
 
+                {% if snack_order %}
                 {% for order in snack_order %}
                 <tr>
                     <td>{{ order.snack.name }}</td>
@@ -50,6 +57,11 @@
                     <td>{{ order.date }}</td>
                 </tr>
                 {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5">No available snack order</td>
+                </tr>
+                {% endif %}
             </table>
         </div>
     </div>

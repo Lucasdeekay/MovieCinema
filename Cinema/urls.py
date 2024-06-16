@@ -35,8 +35,10 @@ urlpatterns = [
     path('subscription', views.subscription, name='subscription'),
     path('subscription/<str:subscription_name>', views.change_subscription_view, name='change_subscription'),
     path('home', views.movie_rows, name='home'),
-    path('get_available_seats', views.get_available_seats, name='get_available_seats'),
+    path('get-available-seats', views.get_available_seats, name='get_available_seats'),
+    path('orders', views.get_valid_movie_orders, name='orders'),
     path('movie-detail/<int:movie_id>', views.movie_detail, name='movie_detail'),
+    path('download-ticket/<int:order_id>', views.download_ticket, name='download_ticket'),
     path('verify/<str:reference>/', views.verify_payment, name='verify_payment'),
     path('api', include(router.urls)),
 ]

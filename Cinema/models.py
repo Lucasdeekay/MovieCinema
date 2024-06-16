@@ -110,7 +110,7 @@ class MovieOrder(models.Model):
     snack = models.ForeignKey(SnackOrder, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now().date())
-    is_valid = models.BooleanField(default=False)
+    is_used = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.user} - {self.movie} - {self.is_valid}'
+        return f'{self.user} - {self.movie} - {self.is_used}'
