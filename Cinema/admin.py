@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment, \
+    Movie, Seat
 
 
 @admin.register(SubscriptionType)
@@ -13,9 +14,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('user', 'subscription_type', 'is_active')
 
 
-@admin.register(MovieOrder)
-class MovieOrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'date')
+@admin.register(Movie)
+class MovieAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date')
 
 
 @admin.register(Restaurant)
@@ -36,3 +37,13 @@ class SnackOrderAdmin(admin.ModelAdmin):
 @admin.register(SubscriptionPayment)
 class SubscriptionPaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'subscription_type', 'date')
+
+
+@admin.register(Seat)
+class SeatAdmin(admin.ModelAdmin):
+    list_display = ('user', 'seat_no', 'date')
+
+
+@admin.register(MovieOrder)
+class MovieOrderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'movie', 'snack', 'seat', 'date', 'is_valid')

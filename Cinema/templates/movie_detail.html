@@ -122,35 +122,45 @@
                                                         {% endfor %}
                                                     </div>
                                                     <div class="mb-4">
-                                                        <select name="restaurant" required="" class="form-control rounded-0">
-                                                            <option value="">Select Restaurant</option>
-                                                            {% for restaurant in restaurants %}
-                                                            <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                        <input id="date" type="date" name="date" required="" class="form-control rounded-0">
                                                     </div>
                                                     <div class="mb-4">
-                                                        <select name="snack" class="form-control rounded-0" required="">
-                                                            <option value="">Select Snack</option>
-                                                            {% for snack in snacks %}
-                                                            <option value="{{ snack.id }}">{{ snack.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-4">
-                                                        <input type="number" name="quantity"
-                                                               class="form-control rounded-0"
-                                                               placeholder="Quantity" required="">
-                                                    </div>
-                                                    <div class="full-button">
-                                                        <div class="iq-button">
-                                                            <button type="submit"
-                                                                    class="btn text-uppercase position-relative">
-                                                                <span class="button-text">submit</span>
-                                                                <i class="fa-solid fa-play"></i>
-                                                            </button>
+                                                            <select id="seat_no" name="seat_no" disabled required="" class="form-control rounded-0">
+                                                                <option value="">-- Select Seat --</option>
+                                                            </select>
+                                                        </div>
+                                                    <div id="others">
+                                                        <div class="mb-4">
+                                                            <select name="restaurant" required="" class="form-control rounded-0">
+                                                                <option value="">Select Restaurant</option>
+                                                                {% for restaurant in restaurants %}
+                                                                <option value="{{ restaurant.id }}">{{ restaurant.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-4">
+                                                            <select name="snack" class="form-control rounded-0" required="">
+                                                                <option value="">Select Snack</option>
+                                                                {% for snack in snacks %}
+                                                                <option value="{{ snack.id }}">{{ snack.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-4">
+                                                            <input type="number" name="quantity"
+                                                                   class="form-control rounded-0"
+                                                                   placeholder="Quantity" required="">
                                                         </div>
                                                     </div>
+                                                    <div class="full-button">
+                                                            <div class="iq-button">
+                                                                <button type="submit" id="btn" disabled
+                                                                        class="btn text-uppercase position-relative">
+                                                                    <span class="button-text">submit</span>
+                                                                    <i class="fa-solid fa-play"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -160,10 +170,52 @@
                         </div>
                     </div>
                 </div>
-                <!-- Movie Source End -->      </div>
+                <!-- Movie Source End -->
+            </div>
         </div>
     </div>
 </div>
 
 {% endblock main %}
+
+{% block ajax %}
+
+$('#others').hide();
+
+$('#date').change(function() {
+    const selectedDate = $(this).val();
+    // Call the AJAX function to get available seats
+    getAvailableSeats(selectedDate);
+  });
+
+function getAvailableSeats(date) {
+  $.ajax({
+    url: "{% url 'get_available_seats' %}",
+    type: "POST",
+    data: {
+        date: date,
+        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+    },
+    success: function(response) {
+      // Update the select options with available seats
+      updateSeatSelect(response.available_seats);
+    },
+    error: function(error) {
+      console.error("Error fetching available seats:", error);
+      // Handle errors appropriately (e.g., display an error message)
+    }
+  });
+}
+
+function updateSeatSelect(availableSeats) {
+$('#others').show();
+  $('#seat_no').prop('disabled', false);
+    $('#btn').prop('disabled', false);
+  availableSeats.forEach(function(seat) {
+    $('#seat_no').append($('<option></option>').val(seat).text(seat));
+  });
+}
+
+
+{% endblock ajax %}
 

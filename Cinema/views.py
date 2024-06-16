@@ -5,11 +5,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from paystackapi.transaction import Transaction
 
-from Cinema.models import Subscription, SubscriptionType, MovieOrder, Snack, Restaurant, SnackOrder, SubscriptionPayment
+from Cinema.models import Subscription, SubscriptionType, MovieOrder, Snack, Restaurant, SnackOrder, \
+    SubscriptionPayment, Movie, Seat
 
 # Import libraries for API requests and YouTube trailer lookup (replace with your preferred methods)
 import requests
@@ -249,11 +250,24 @@ def movie_detail(request, movie_id):
 
     user = request.user
 
+    try:
+        url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for failed requests
+        movie_data = response.json()
+    except requests.exceptions.RequestException as e:
+        messages.error(request, f"Error fetching movie details for ID {movie_id}: {e}")
+        return redirect('movie_detail')
+
+    movie, created = Movie.objects.get_or_create(external_id=movie_id, title=movie_data['original_title'])
+
     # Handle form submission
     if request.method == 'POST':
         snack_id = request.POST['snack']
         restaurant_id = request.POST['restaurant']
         quantity = request.POST['quantity']
+        seat_no = request.POST['seat_no']
+        date = request.POST['date']
 
         restaurant = Restaurant.objects.get(id=restaurant_id)
         snack = Snack.objects.get(id=snack_id)
@@ -267,7 +281,7 @@ def movie_detail(request, movie_id):
         )
 
         if response['status']:
-            SnackOrder.objects.create(
+            snack_order = SnackOrder.objects.create(
                 user=user,
                 snack=snack,
                 restaurant=restaurant,
@@ -275,22 +289,24 @@ def movie_detail(request, movie_id):
                 total_price=total_price
             )
 
+            seat_order = Seat.objects.create(
+                user=user,
+                seat_no=seat_no,
+                date=date
+            )
+
+            MovieOrder.objects.create(
+                user=user,
+                movie=movie,
+                snack=snack_order,
+                seat=seat_order,
+            )
+
             messages.success(request, f"Order successfully made.")
             return HttpResponseRedirect(response['data']['authorization_url'])
 
         # Redirect to confirmation or payment page (replace with your logic)
         return redirect('order_confirmation')
-
-    try:
-        url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for failed requests
-        movie_data = response.json()
-    except requests.exceptions.RequestException as e:
-        messages.error(request, f"Error fetching movie details for ID {movie_id}: {e}")
-        return redirect('login')
-
-    MovieOrder.objects.get_or_create(user=user, external_id=movie_id, title=movie_data['original_title'])
 
     # Available snacks and restaurants
     snacks = Snack.objects.all()
@@ -315,6 +331,26 @@ def movie_detail(request, movie_id):
         'base_url': base_url,
     }
     return render(request, 'movie_detail.html', context)
+
+
+def get_available_seats(request):
+    """
+      Fetches available seats for a given date.
+
+      Returns a list of available seat numbers.
+      """
+    date = request.POST['date']
+
+    # Get all existing seat reservations for the specified date
+    booked_seats = Seat.objects.filter(date=date).values_list('seat_no', flat=True)
+
+    # Create a list of all seats (1-100)
+    all_seats = list(range(1, 101))
+
+    # Remove booked seats from the list of all seats
+    available_seats = [seat for seat in all_seats if seat not in booked_seats]
+
+    return JsonResponse({'available_seats': available_seats})
 
 
 def verify_payment(request, reference):

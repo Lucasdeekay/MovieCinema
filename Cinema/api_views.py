@@ -1,13 +1,14 @@
 from rest_framework import viewsets
 
-from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment, \
+    Movie, Seat
 from .serializers import (
     SubscriptionTypeSerializer,
     SubscriptionSerializer,
     MovieOrderSerializer,
     RestaurantSerializer,
     SnackSerializer,
-    SnackOrderSerializer, SubscriptionPaymentSerializer,
+    SnackOrderSerializer, SubscriptionPaymentSerializer, MovieSerializer, SeatSerializer,
 )
 
 
@@ -21,9 +22,9 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
 
 
-class MovieOrderViewSet(viewsets.ModelViewSet):
-    queryset = MovieOrder.objects.all()
-    serializer_class = MovieOrderSerializer
+class MovieViewSet(viewsets.ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -44,3 +45,13 @@ class SnackOrderViewSet(viewsets.ModelViewSet):
 class SubscriptionPaymentViewSet(viewsets.ModelViewSet):
     queryset = SubscriptionPayment.objects.all()
     serializer_class = SubscriptionPaymentSerializer
+
+
+class SeatViewSet(viewsets.ModelViewSet):
+    queryset = Seat.objects.all()
+    serializer_class = SeatSerializer
+
+
+class MovieOrderViewSet(viewsets.ModelViewSet):
+    queryset = MovieOrder.objects.all()
+    serializer_class = MovieOrderSerializer

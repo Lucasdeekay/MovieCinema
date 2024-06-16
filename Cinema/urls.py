@@ -9,17 +9,19 @@ from .api_views import (
     MovieOrderViewSet,
     RestaurantViewSet,
     SnackViewSet,
-    SnackOrderViewSet, SubscriptionPaymentViewSet
+    SnackOrderViewSet, SubscriptionPaymentViewSet, MovieViewSet, SeatViewSet
 )
 
 router = DefaultRouter()
 router.register(r'subscriptions/types', SubscriptionTypeViewSet, basename='subscription_type')
 router.register(r'subscriptions', SubscriptionViewSet, basename='subscription')
+router.register(r'movie', MovieViewSet, basename='movie')
 router.register(r'movie-orders', MovieOrderViewSet, basename='movie_order')
 router.register(r'restaurants', RestaurantViewSet, basename='restaurant')
 router.register(r'snacks', SnackViewSet, basename='snack')
 router.register(r'snack-orders', SnackOrderViewSet, basename='snack_order')
 router.register(r'subscription/payments', SubscriptionPaymentViewSet, basename='subscription_payment')
+router.register(r'seats', SeatViewSet, basename='seat')
 
 
 urlpatterns = [
@@ -33,6 +35,7 @@ urlpatterns = [
     path('subscription', views.subscription, name='subscription'),
     path('subscription/<str:subscription_name>', views.change_subscription_view, name='change_subscription'),
     path('home', views.movie_rows, name='home'),
+    path('get_available_seats', views.get_available_seats, name='get_available_seats'),
     path('movie-detail/<int:movie_id>', views.movie_detail, name='movie_detail'),
     path('verify/<str:reference>/', views.verify_payment, name='verify_payment'),
     path('api', include(router.urls)),

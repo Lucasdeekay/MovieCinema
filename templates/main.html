@@ -237,6 +237,9 @@
     $(function(){
         $("#toast").fadeIn(5000);
       $("#toast").fadeOut(5000);
+
+      {% block ajax %}
+    {% endblock ajax %}
     })
 </script>
 </body>

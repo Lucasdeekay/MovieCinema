@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment
+from .models import SubscriptionType, Subscription, MovieOrder, Restaurant, Snack, SnackOrder, SubscriptionPayment, \
+    Movie, Seat
 
 
 class SubscriptionTypeSerializer(serializers.ModelSerializer):
@@ -15,9 +16,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = ('user', 'subscription_type', 'is_active')
 
 
-class MovieOrderSerializer(serializers.ModelSerializer):
+class MovieSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MovieOrder
+        model = Movie
         fields = '__all__'
 
 
@@ -42,4 +43,16 @@ class SnackOrderSerializer(serializers.ModelSerializer):
 class SubscriptionPaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionPayment
+        fields = '__all__'
+
+
+class SeatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seat
+        fields = '__all__'
+
+
+class MovieOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieOrder
         fields = '__all__'
