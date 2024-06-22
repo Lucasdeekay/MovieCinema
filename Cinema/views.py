@@ -19,7 +19,7 @@ from youtubesearchpython import VideosSearch
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 
 # Replace with your actual TMDB API key
-API_KEY = ''
+API_KEY = '1e28d26c788dd3b0a958103a97804da4'
 base_url = "https://image.tmdb.org/t/p/original"
 
 
@@ -68,34 +68,32 @@ def register_view(request):
 
 def forgot_password_view(request):
     if request.method == 'POST':
-        email = request.POST['email']
+        email = request.POST['email'].strip()
         try:
             user = User.objects.get(email=email)
-            return redirect('password_reset', args=(user.id,))
+            login(request, user)
+            return redirect('password_reset')
         except User.DoesNotExist:
             messages.error(request, 'Email address not found.')
-            return render(request, 'forgot_password.html')
+            return redirect('forgot_password')
     return render(request, 'forgot_password.html')
 
 
-def password_reset_view(request, user_id):
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        error_message = 'Invalid user ID.'
-        return render(request, 'password_reset.html', {'error_message': error_message})
+def password_reset_view(request):
+    user = request.user
 
     if request.method == 'POST':
-        new_password1 = request.POST['new_password1']
-        new_password2 = request.POST['new_password2']
+        new_password1 = request.POST['new_password1'].strip()
+        new_password2 = request.POST['new_password2'].strip()
         if new_password1 != new_password2:
             messages.error(request, 'Passwords do not match.')
-            return render(request, 'password_reset.html')
+            return redirect('password_reset')
         # Set the new password
         user.set_password(new_password1)
         user.save()
+        logout(request)
         messages.success(request, 'Password reset successfully!')
-        return render(request, 'password_reset.html')
+        return redirect('login')
     return render(request, 'password_reset.html')
 
 
