@@ -139,12 +139,11 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-4">
-                                                            <select name="snack" class="form-control rounded-0" required="">
-                                                                <option value="">Select Snack</option>
-                                                                {% for snack in snacks %}
-                                                                <option value="{{ snack.id }}">{{ snack.name }}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                                            <h6>Choose a Snack</h6>
+                                                            {% for snack in snacks %}
+                                                            <input type="radio" name="snack" value="{{ snack.id }}" style="margin-right:15px">
+                                                            <img class="img rounded" style="margin-right:30px" src="{{ snack.image.url }}" alt="{{ snack.name }}" width="100px">
+                                                            {% endfor %}
                                                         </div>
                                                         <div class="mb-4">
                                                             <input type="number" name="quantity"
