@@ -276,8 +276,11 @@ def movie_detail(request, movie_id):
         # Calculate total price based on selected snacks and quantity
         total_price = sum(float(snack.price) * int(quantity) for snack in snacks)
 
-        # Simulate payment processing (replace with actual logic)
-        response = {'status': True, 'data': {'authorization_url': '/mock-payment-success'}}
+        response = Transaction.initialize(
+            reference=str(uuid.uuid4()),
+            amount=total_price * 100,
+            email=user.email
+        )
 
         if response['status']:
             # Create snack orders
