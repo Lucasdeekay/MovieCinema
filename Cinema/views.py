@@ -243,10 +243,10 @@ def movie_rows(request):
 @login_required
 def movie_detail(request, movie_id):
     """
-  Fetches details for a specific movie using its ID.
+    Fetches details for a specific movie using its ID.
 
-  Renders a template with the movie details.
-  """
+    Renders a template with the movie details.
+    """
 
     user = request.user
 
@@ -263,44 +263,50 @@ def movie_detail(request, movie_id):
 
     # Handle form submission
     if request.method == 'POST':
-        snack_id = request.POST['snack']
+        # Retrieve selected snacks (handle multiple snacks)
+        snack_ids = request.POST.getlist('snacks')
         restaurant_id = request.POST['restaurant']
         quantity = request.POST['quantity']
         seat_no = request.POST['seat_no']
         date = request.POST['date']
 
         restaurant = Restaurant.objects.get(id=restaurant_id)
-        snack = Snack.objects.get(id=snack_id)
+        snacks = Snack.objects.filter(id__in=snack_ids)
 
-        total_price = float(snack.price) * int(quantity)
+        # Calculate total price based on selected snacks and quantity
+        total_price = sum(float(snack.price) * int(quantity) for snack in snacks)
 
-        response = Transaction.initialize(
-            reference=str(uuid.uuid4()),
-            amount=total_price * 100,
-            email=user.email
-        )
+        # Simulate payment processing (replace with actual logic)
+        response = {'status': True, 'data': {'authorization_url': '/mock-payment-success'}}
 
         if response['status']:
-            snack_order = SnackOrder.objects.create(
-                user=user,
-                snack=snack,
-                restaurant=restaurant,
-                quantity=int(quantity),
-                total_price=total_price
-            )
+            # Create snack orders
+            snack_orders = []
+            for snack in snacks:
+                snack_order = SnackOrder.objects.create(
+                    user=user,
+                    snack=snack,
+                    restaurant=restaurant,
+                    quantity=int(quantity),
+                    total_price=float(snack.price) * int(quantity)
+                )
+                snack_orders.append(snack_order)
 
+            # Create seat order
             seat_order = Seat.objects.create(
                 user=user,
                 seat_no=seat_no,
                 date=date
             )
 
-            MovieOrder.objects.create(
+            # Create movie order linking to snack orders and seat order
+            movie_order = MovieOrder.objects.create(
                 user=user,
                 movie=movie,
-                snack=snack_order,
-                seat=seat_order,
+                seat=seat_order
             )
+
+            movie_order.snacks.add(*snack_orders)  # Add all snack orders to movie order
 
             messages.success(request, f"Order successfully made.")
             return HttpResponseRedirect(response['data']['authorization_url'])
@@ -381,10 +387,10 @@ def get_valid_movie_orders(request):
 
 def generate_ticket_image(order):
     """
-  Generates a ticket image with order information and a visually appealing design.
+    Generates a ticket image with order information and a visually appealing design.
 
-  Returns a BytesIO object containing the image data.
-  """
+    Returns a BytesIO object containing the image data.
+    """
 
     # Card dimensions and base color
     card_width, card_height = 400, 200
@@ -411,6 +417,7 @@ def generate_ticket_image(order):
         'movie': (card_width // 2, 110),
         'seat_no': (card_width // 2, 150),
         'date': (350, 170),
+        'order_id': (50, 170),  # Position for Order ID
     }
 
     # Draw text with gold color and slight blur
@@ -426,9 +433,11 @@ def generate_ticket_image(order):
             text = f"Seat NO.{order.seat.seat_no}"
         elif field == "date":
             text = f"{order.date}"
+        elif field == "order_id":
+            text = f"Ticket ID: {order.id}"  # Display Order ID as Ticket ID
 
         text_width = draw.textlength(text, font=font, font_size=24.0)
-        centered_position = (position[0] - text_width // 2, position[1])
+        centered_position = (position[0], position[1])
 
         if field == 'company_name':
             text = "MOVIE CINEMA"

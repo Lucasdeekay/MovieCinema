@@ -108,7 +108,7 @@ class Seat(models.Model):
 class MovieOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    snack = models.ForeignKey(SnackOrder, on_delete=models.CASCADE)
+    snacks = models.ManyToManyField(SnackOrder)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now().date())
     is_used = models.BooleanField(default=False)

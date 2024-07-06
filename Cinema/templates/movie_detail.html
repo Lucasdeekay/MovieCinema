@@ -8,7 +8,6 @@
 
 {% block main %}
 
-
 <div class="details-part">
     <div class="container-fluid">
         <div class="row">
@@ -125,10 +124,10 @@
                                                         <input id="date" type="date" name="date" required="" class="form-control rounded-0">
                                                     </div>
                                                     <div class="mb-4">
-                                                            <select id="seat_no" name="seat_no" disabled required="" class="form-control rounded-0">
-                                                                <option value="">-- Select Seat --</option>
-                                                            </select>
-                                                        </div>
+                                                        <select id="seat_no" name="seat_no" disabled required="" class="form-control rounded-0">
+                                                            <option value="">-- Select Seat --</option>
+                                                        </select>
+                                                    </div>
                                                     <div id="others">
                                                         <div class="mb-4">
                                                             <select name="restaurant" required="" class="form-control rounded-0">
@@ -139,10 +138,15 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-4">
-                                                            <h6>Choose a Snack</h6>
+                                                            <h6>Choose Snacks</h6>
                                                             {% for snack in snacks %}
-                                                            <input type="radio" name="snack" value="{{ snack.id }}" style="margin-right:15px">
-                                                            <img class="img rounded" style="margin-right:30px" src="{{ snack.image.url }}" alt="{{ snack.name }}" width="100px">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" name="snacks" value="{{ snack.id }}">
+                                                                <label class="form-check-label">
+                                                                    <img class="img rounded" src="{{ snack.image.url }}" alt="{{ snack.name }}" width="100px">
+                                                                    {{ snack.name }}
+                                                                </label>
+                                                            </div>
                                                             {% endfor %}
                                                         </div>
                                                         <div class="mb-4">
@@ -152,14 +156,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="full-button">
-                                                            <div class="iq-button">
-                                                                <button type="submit" id="btn" disabled
-                                                                        class="btn text-uppercase position-relative">
-                                                                    <span class="button-text">submit</span>
-                                                                    <i class="fa-solid fa-play"></i>
-                                                                </button>
-                                                            </div>
+                                                        <div class="iq-button">
+                                                            <button type="submit" id="btn" disabled
+                                                                    class="btn text-uppercase position-relative">
+                                                                <span class="button-text">submit</span>
+                                                                <i class="fa-solid fa-play"></i>
+                                                            </button>
                                                         </div>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -185,7 +189,7 @@ $('#date').change(function() {
     const selectedDate = $(this).val();
     // Call the AJAX function to get available seats
     getAvailableSeats(selectedDate);
-  });
+});
 
 function getAvailableSeats(date) {
   $.ajax({
@@ -207,14 +211,12 @@ function getAvailableSeats(date) {
 }
 
 function updateSeatSelect(availableSeats) {
-$('#others').show();
+  $('#others').show();
   $('#seat_no').prop('disabled', false);
-    $('#btn').prop('disabled', false);
+  $('#btn').prop('disabled', false);
   availableSeats.forEach(function(seat) {
     $('#seat_no').append($('<option></option>').val(seat).text(seat));
   });
 }
 
-
 {% endblock ajax %}
-
